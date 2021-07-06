@@ -22,7 +22,7 @@ Example: `CustodyCli.exe generate -o keys.json`
 
 Encrypts the plain Guardian or Vault JSON configuration file with the custody configuration public key.
 
-`CustodyCli.exe generate -k|--key <Custody settings RSA public key file> -i|--in <Custody settings plain JSON file> -o|--out <Custody settings encrypted file>`
+`CustodyCli.exe encrypt -k|--key <Custody settings RSA public key file> -i|--in <Custody settings plain JSON file> -o|--out <Custody settings encrypted file>`
 
 Example: `CustodyCli.exe encrypt -k guardian.publickey -i guardian.json -o guardian-encrypted.json`
 
