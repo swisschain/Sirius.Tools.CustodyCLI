@@ -12,11 +12,12 @@ This utility can be used to initialize custody Guardian and Vault services. It c
 
 ### Generate
 
-Generates RSA keys pair to the specified output file. This command can be used to generate Customer's keys pair or Guardian keys pair.
+Generates AES|RSA keys to the specified output file. This command can be used to generate Customer's keys pair or Guardian keys pair.
 
-`CustodyCli.exe generate -o|--out <key pair JSON file path>`
+`CustodyCli.exe generate -t|--type <key type (aes|rsa)> -o|--out <key pair JSON file path>`
 
-Example: `CustodyCli.exe generate -o keys.json`
+Example: `CustodyCli.exe generate -t rsa -o rsa_key.json`
+Example: `CustodyCli.exe generate -t aes -o aes_key.json`
 
 ### Encrypt
 

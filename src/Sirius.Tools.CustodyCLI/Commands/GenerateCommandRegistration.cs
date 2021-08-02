@@ -17,16 +17,33 @@ namespace Sirius.Tools.CustodyCLI.Commands
 
         public void StartExecution(CommandLineApplication lineApplication)
         {
-            lineApplication.Description = "Generates RSA key pair.";
+            lineApplication.Description = "Generates keys.";
             lineApplication.HelpOption("-?|-h|--help");
 
+            var typeOption = lineApplication.Option(
+                "-t|--type <in>",
+                "Key type",
+                CommandOptionType.SingleValue);
+            
             var outOption = lineApplication.Option(
                 "-o|--out <in>",
-                "Key pair JSON file",
+                "Key JSON file",
                 CommandOptionType.SingleValue);
 
             lineApplication.OnExecute(async () =>
             {
+                var typeOptionValue = typeOption.Value();
+
+                if (string.IsNullOrEmpty(typeOptionValue))
+                {
+                    typeOptionValue = "rsa";
+                }
+                else
+                {
+                    if (typeOptionValue != "rsa" && typeOptionValue != "aes")
+                        throw new OptionInvalidException($"Unknown key type {nameof(typeOptionValue)}.");
+                }
+
                 var outOptionValue = outOption.Value();
 
                 if (string.IsNullOrEmpty(outOptionValue))
@@ -37,6 +54,7 @@ namespace Sirius.Tools.CustodyCLI.Commands
 
                 var command = _factory.CreateCommand(serviceProvider =>
                     new GenerateCommand(
+                        typeOptionValue,
                         outOptionValue,
                         serviceProvider.GetRequiredService<JsonSerializerOptions>(),
                         serviceProvider.GetRequiredService<ILogger<GenerateCommand>>()));
