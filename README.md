@@ -17,6 +17,7 @@ Generates AES|RSA keys to the specified output file. This command can be used to
 `CustodyCli.exe generate -t|--type <key type (aes|rsa)> -o|--out <key pair JSON file path>`
 
 Example: `CustodyCli.exe generate -t rsa -o rsa_key.json`
+
 Example: `CustodyCli.exe generate -t aes -o aes_key.json`
 
 ### Encrypt
