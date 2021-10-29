@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Events;
+using Sirius.Tools.CustodyCLI.Clients;
 using Sirius.Tools.CustodyCLI.Commands;
 
 namespace Sirius.Tools.CustodyCLI
@@ -23,7 +25,12 @@ namespace Sirius.Tools.CustodyCLI
                         logging.AddSerilog(
                             new LoggerConfiguration()
                                 .MinimumLevel.Debug()
-                                .WriteTo.File("logs/custody-cli.log")
+                                .WriteTo.RollingFile("logs/{Date}-custody-cli.log")
+                                .CreateLogger());
+                        logging.AddSerilog(
+                            new LoggerConfiguration()
+                                .MinimumLevel.Information()
+                                .WriteTo.Console(LogEventLevel.Information, "{Message:lj}{NewLine}")
                                 .CreateLogger());
                     })
                     .AddSingleton(new JsonSerializerOptions
@@ -31,7 +38,8 @@ namespace Sirius.Tools.CustodyCLI
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                         NumberHandling = JsonNumberHandling.AllowReadingFromString
                     })
-                    .AddHttpClient();
+                    .AddHttpClient()
+                    .AddSingleton<CustodyApiClient>();
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 

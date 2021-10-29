@@ -1,8 +1,7 @@
-﻿using System.IO;
-using System.Net.Http;
-using Microsoft.Extensions.CommandLineUtils;
+﻿using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sirius.Tools.CustodyCLI.Clients;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {
@@ -22,7 +21,7 @@ namespace Sirius.Tools.CustodyCLI.Commands
 
             var urlOption = lineApplication.Option(
                 "-u|--url <url>",
-                "Custody settings URL",
+                "Custody URL",
                 CommandOptionType.SingleValue);
 
             var fileOption = lineApplication.Option(
@@ -30,7 +29,7 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 "Custody encrypted settings JSON file",
                 CommandOptionType.SingleValue);
 
-            lineApplication.OnExecute(async () =>
+            lineApplication.OnExecute(() =>
             {
                 var urlOptionValue = urlOption.Value();
 
@@ -42,17 +41,16 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 if (string.IsNullOrEmpty(fileOptionValue))
                     throw new OptionInvalidException($"{nameof(fileOption)} is required.");
 
-                if (!File.Exists(fileOptionValue))
-                    throw new OptionInvalidException($"\"{fileOptionValue}\" file not found.");
-
                 var command = _factory.CreateCommand(serviceProvider =>
                     new SetupCommand(
                         urlOptionValue,
                         fileOptionValue,
-                        serviceProvider.GetRequiredService<IHttpClientFactory>(),
+                        serviceProvider.GetRequiredService<CustodyApiClient>(),
                         serviceProvider.GetRequiredService<ILogger<SetupCommand>>()));
 
-                return await command.ExecuteAsync();
+                return command.ExecuteAsync()
+                    .GetAwaiter()
+                    .GetResult();
             });
         }
     }

@@ -38,37 +38,66 @@ namespace Sirius.Tools.CustodyCLI.Commands
 
         private async Task GenerateRsaKey()
         {
+            var jsonFileName = $"{_outFile}.json";
+            var publicKeyFileName = $"{_outFile}.publickey";
+            var privateKeyFileName = $"{_outFile}.privatekey";
+
+            var anyFileExists = false;
+
+            foreach (var file in new[] {jsonFileName, publicKeyFileName, privateKeyFileName})
+            {
+                if (File.Exists(file))
+                {
+                    anyFileExists = true;
+                    _logger.LogError($"\"{file}\" file already exists.");
+                }
+            }
+
+            if (anyFileExists)
+                return;
+
             var keyPair = AsymmetricEncryptionService.GenerateKeyPair();
 
-            var message = new KeyPair
-            {
-                PrivateKey = AsymmetricEncryptionService.ExportPrivateKey(keyPair.Private),
-                PublicKey = AsymmetricEncryptionService.ExportPublicKey(keyPair.Public)
-            };
+            var privateKey = AsymmetricEncryptionService.ExportPrivateKey(keyPair.Private);
+            var publicKey = AsymmetricEncryptionService.ExportPublicKey(keyPair.Public);
+
+            var message = new KeyPair {PrivateKey = privateKey, PublicKey = publicKey};
 
             var json = JsonSerializer.Serialize(message, _jsonSerializerOptions);
 
-            await File.WriteAllTextAsync(_outFile, json, Encoding.UTF8);
+            await File.WriteAllTextAsync(jsonFileName, json, Encoding.UTF8);
+            _logger.LogInformation($"File \"{jsonFileName}\" created.");
 
-            _logger.LogInformation($"File \"{_outFile}\" created.");
+            await File.WriteAllTextAsync(publicKeyFileName, publicKey, Encoding.UTF8);
+            _logger.LogInformation($"File \"{publicKeyFileName}\" created.");
+
+            await File.WriteAllTextAsync(privateKeyFileName, privateKey, Encoding.UTF8);
+            _logger.LogInformation($"File \"{privateKeyFileName}\" created.");
         }
 
         private async Task GenerateAesKey()
         {
+            var jsonFileName = $"{_outFile}.key";
+
+            if (File.Exists(jsonFileName))
+            {
+                _logger.LogError($"\"{jsonFileName}\" file already exists.");
+                return;
+            }
+
             var key = SymmetricEncryptionService.GenerateKey();
             var nonce = SymmetricEncryptionService.GenerateNonce();
 
             var message = new SymmetricKey
             {
-                Secret = Convert.ToBase64String(key),
-                Nonce = Convert.ToBase64String(nonce),
+                Secret = Convert.ToBase64String(key), Nonce = Convert.ToBase64String(nonce),
             };
 
             var json = JsonSerializer.Serialize(message, _jsonSerializerOptions);
 
-            await File.WriteAllTextAsync(_outFile, json, Encoding.UTF8);
+            await File.WriteAllTextAsync(jsonFileName, json, Encoding.UTF8);
 
-            _logger.LogInformation($"File \"{_outFile}\" created.");
+            _logger.LogInformation($"File \"{jsonFileName}\" created.");
         }
     }
 }
