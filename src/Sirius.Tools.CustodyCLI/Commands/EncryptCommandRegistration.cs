@@ -46,7 +46,8 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 var urlOptionValue = urlOption.Value();
 
                 if (string.IsNullOrEmpty(keyOptionValue) && string.IsNullOrEmpty(urlOptionValue))
-                    throw new OptionInvalidException("Custody settings public key file or custody URL is required.");
+                    throw new OptionInvalidException(
+                        "Either custody settings public key file or custody URL is required.");
 
                 var inOptionValue = inOption.Value();
 
