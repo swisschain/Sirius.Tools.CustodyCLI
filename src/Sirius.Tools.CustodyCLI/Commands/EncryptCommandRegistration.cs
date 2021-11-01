@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sirius.Tools.CustodyCLI.Clients;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {
@@ -26,6 +25,11 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 "Custody settings public key file",
                 CommandOptionType.SingleValue);
 
+            var urlOption = lineApplication.Option(
+                "-u|--url <url>",
+                "Custody URL",
+                CommandOptionType.SingleValue);
+
             var inOption = lineApplication.Option(
                 "-i|--in <in>",
                 "Custody settings JSON file",
@@ -39,35 +43,30 @@ namespace Sirius.Tools.CustodyCLI.Commands
             lineApplication.OnExecute(async () =>
             {
                 var keyOptionValue = keyOption.Value();
+                var urlOptionValue = urlOption.Value();
 
-                if (string.IsNullOrEmpty(keyOptionValue))
-                    throw new OptionInvalidException($"{nameof(keyOption)} is required.");
-
-                if (!File.Exists(keyOptionValue))
-                    throw new OptionInvalidException($"\"{keyOptionValue}\" file not found.");
+                if (string.IsNullOrEmpty(keyOptionValue) && string.IsNullOrEmpty(urlOptionValue))
+                    throw new OptionInvalidException(
+                        "Either custody settings public key file or custody URL is required.");
 
                 var inOptionValue = inOption.Value();
 
                 if (string.IsNullOrEmpty(inOptionValue))
-                    throw new OptionInvalidException($"{nameof(inOption)} is required.");
-
-                if (!File.Exists(inOptionValue))
-                    throw new OptionInvalidException($"\"{inOptionValue}\" file not found.");
+                    throw new OptionInvalidException("Custody settings JSON file is required.");
 
                 var outOptionValue = outOption.Value();
 
                 if (string.IsNullOrEmpty(outOptionValue))
-                    throw new OptionInvalidException($"{nameof(outOption)} is required.");
-
-                if (File.Exists(outOptionValue))
-                    throw new OptionInvalidException($"\"{outOptionValue}\" file already exists.");
+                    throw new OptionInvalidException("Custody encrypted settings JSON file is required.");
 
                 var command = _factory.CreateCommand(serviceProvider =>
                     new EncryptCommand(
                         keyOptionValue,
+                        urlOptionValue,
                         inOptionValue,
                         outOptionValue,
                         serviceProvider.GetRequiredService<JsonSerializerOptions>(),
+                        serviceProvider.GetRequiredService<CustodyApiClient>(),
                         serviceProvider.GetRequiredService<ILogger<EncryptCommand>>()));
 
                 return await command.ExecuteAsync();

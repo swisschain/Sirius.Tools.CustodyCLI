@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,13 +23,13 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 "-t|--type <in>",
                 "Key type",
                 CommandOptionType.SingleValue);
-            
+
             var outOption = lineApplication.Option(
                 "-o|--out <in>",
-                "Key JSON file",
+                "Key file name without extension",
                 CommandOptionType.SingleValue);
 
-            lineApplication.OnExecute(async () =>
+            lineApplication.OnExecute(() =>
             {
                 var typeOptionValue = typeOption.Value();
 
@@ -49,9 +48,6 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 if (string.IsNullOrEmpty(outOptionValue))
                     throw new OptionInvalidException($"{nameof(outOption)} is required.");
 
-                if (File.Exists(outOptionValue))
-                    throw new OptionInvalidException($"\"{outOptionValue}\" file already exists.");
-
                 var command = _factory.CreateCommand(serviceProvider =>
                     new GenerateCommand(
                         typeOptionValue,
@@ -59,7 +55,9 @@ namespace Sirius.Tools.CustodyCLI.Commands
                         serviceProvider.GetRequiredService<JsonSerializerOptions>(),
                         serviceProvider.GetRequiredService<ILogger<GenerateCommand>>()));
 
-                return await command.ExecuteAsync();
+                return command.ExecuteAsync()
+                    .GetAwaiter()
+                    .GetResult();
             });
         }
     }
