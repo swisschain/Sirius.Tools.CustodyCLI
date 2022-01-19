@@ -36,3 +36,25 @@ Setups encrypted file to the given Guardian or Vault instance. Guardian or Vault
 `CustodyCli.exe setup -u|--url <Custody URL> -f|--file <Custody settings encrypted file>`
 
 Example: `CustodyCli.exe setup -u http://localhost:5000/ -f guardian-encrypted.json`
+
+### Run in docker
+
+Run docker
+
+`docker run --name dn -it mcr.microsoft.com/dotnet/sdk:5.0`
+
+If you plan to get git repository by ssh install Vim and OpenSSH, add ssh key to /tmp/key file and load it
+
+`chmod 400 /tmp/key && eval $(ssh-agent -s ) && ssh-add /tmp/key`
+
+Clone repository and run build
+
+`git clone git@github.com:swisschain/Sirius.Tools.CustodyCLI.git && cd Sirius.Tools.CustodyCLI/ && dotnet build`
+
+Go to bin directory
+
+`cd src/Sirius.Tools.CustodyCLI/bin/Debug/net5.0/`
+
+Run initialization
+
+`dotnet CustodyCli.dll setup -u|--url <Custody URL> -f|--file <Custody settings encrypted file>`
