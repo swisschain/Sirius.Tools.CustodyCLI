@@ -41,7 +41,7 @@ namespace Sirius.Tools.CustodyCLI.Commands
                 CommandOptionType.SingleValue);
 
             var userNameOption = lineApplication.Option(
-                "-n|--uname <string>",
+                "-u|--uname <string>",
                 $"Custody user name to create or to update. Default is `{_defaultUserName}`",
                 CommandOptionType.SingleValue);
 

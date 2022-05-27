@@ -37,6 +37,26 @@ Setups encrypted file to the given Guardian or Vault instance. Guardian or Vault
 
 Example: `CustodyCli.exe setup -u http://localhost:5000/ -f guardian-encrypted.json`
 
+### Initialize Guardian database
+
+Initializes Guardian database. Creates required roles and DB. Both Vault and Guardian can use the same DB and user role.
+
+`CustodyCli.exe initguardiandb -c|--conn <DB connection string> -p|--upass <custody user password>`
+
+There are also optional parameters, see `CustodyCli.exe initguardiandb --help` for all options.
+
+Example: `CustodyCli.exe initguardiandb -c "Server=localhost;Database=postgres;Port=5432;User Id=admin;Password=admin;SSL Mode=Prefer;Root Certificate=cert.pem" -p "0123456789ABCdef"`
+
+### Initialize Vault database
+
+Initializes Vault database. Creates required roles and DB. Both Vault and Guardian can use the same DB and user role.
+
+`CustodyCli.exe initvaultdb -c|--conn <DB connection string> -p|--upass <custody user password>`
+
+There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
+
+Example: `CustodyCli.exe initvaultdb -c "Server=localhost;Database=postgres;Port=5432;User Id=admin;Password=admin;SSL Mode=Prefer;Root Certificate=cert.pem" -p "0123456789ABCdef"`
+
 ### Run in docker
 
 Run docker
