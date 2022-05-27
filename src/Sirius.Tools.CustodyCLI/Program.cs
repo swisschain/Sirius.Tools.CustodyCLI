@@ -57,10 +57,14 @@ namespace Sirius.Tools.CustodyCLI
                 var generateCommandRegistration = new GenerateCommandRegistration(commandFactory);
                 var encryptCommandRegistration = new EncryptCommandRegistration(commandFactory);
                 var setupCommandRegistration = new SetupCommandRegistration(commandFactory);
+                var initGuardianDbCommandRegistration = new InitGuardianDbCommandRegistration(commandFactory);
+                var initVaultDbCommandRegistration = new InitVaultDbCommandRegistration(commandFactory);
 
                 application.Command("generate", generateCommandRegistration.StartExecution, false);
                 application.Command("encrypt", encryptCommandRegistration.StartExecution, false);
                 application.Command("setup", setupCommandRegistration.StartExecution, false);
+                application.Command("initguardiandb", initGuardianDbCommandRegistration.StartExecution, false);
+                application.Command("initvaultdb", initVaultDbCommandRegistration.StartExecution, false);
 
                 ErrorRedirect.RedirectErrorToStandardError(() => application.Execute(args));
             }
