@@ -6,6 +6,7 @@ using Sirius.Tools.CustodyCLI.Clients;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {
+
     public class EncryptCommandRegistration : ICommandRegistration
     {
         private readonly CommandFactory _factory;

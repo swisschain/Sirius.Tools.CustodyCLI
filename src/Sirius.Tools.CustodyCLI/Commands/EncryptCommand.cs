@@ -11,6 +11,7 @@ using Sirius.Tools.CustodyCLI.Crypto;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {
+
     public class EncryptCommand : ICommand
     {
         private readonly string _keyFile;
