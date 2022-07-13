@@ -60,13 +60,14 @@ namespace Sirius.Tools.CustodyCLI
                 var initGuardianDbCommandRegistration = new InitGuardianDbCommandRegistration(commandFactory);
                 var initVaultDbCommandRegistration = new InitVaultDbCommandRegistration(commandFactory);
                 var signWithdrawalRequestV1Registration = new SignWithdrawalV1CommandRegistration(commandFactory);
+                var signWithdrawalRequestV2Registration = new SignWithdrawalV2CommandRegistration(commandFactory);
 
                 application.Command("generate", generateCommandRegistration.StartExecution, false);
                 application.Command("encrypt", encryptCommandRegistration.StartExecution, false);
                 application.Command("setup", setupCommandRegistration.StartExecution, false);
                 application.Command("initguardiandb", initGuardianDbCommandRegistration.StartExecution, false);
                 application.Command("initvaultdb", initVaultDbCommandRegistration.StartExecution, false);
-                application.Command("signwithdrawal", signWithdrawalRequestV1Registration.StartExecution, false);
+                application.Command("signwithdrawal", signWithdrawalRequestV2Registration.StartExecution, false);
 
                 ErrorRedirect.RedirectErrorToStandardError(() => application.Execute(args));
             }

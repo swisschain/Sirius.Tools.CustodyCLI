@@ -4,6 +4,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 using Sirius.Tools.CustodyCLI.Crypto;
 
 namespace Sirius.Tools.CustodyCLI.Commands
@@ -34,7 +36,9 @@ namespace Sirius.Tools.CustodyCLI.Commands
             var privateKey = await File.ReadAllTextAsync(_privateKeyFile);
             var publicKey = string.IsNullOrWhiteSpace(_publicKeyFile) ? null : await File.ReadAllTextAsync(_publicKeyFile);
 
-            var document = await File.ReadAllTextAsync(_inFile);
+            var document = (await File.ReadAllTextAsync(_inFile))
+                .Replace("\r", "")
+                .Replace("\n", "");
             var data = Encoding.UTF8.GetBytes(document);
             
             var signature = AsymmetricEncryptionService.GenerateSignature(data, privateKey);
