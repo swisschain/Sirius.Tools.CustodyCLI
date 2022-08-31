@@ -8,6 +8,28 @@ This utility can be used to initialize custody Guardian and Vault services. It c
 * Encrypt custody configuration with the public keys
 * Configure specified custody instance with the encrypted configuration
 
+## Build
+
+`.Net 5.0` SDK is required in order to build and run Custody CLI
+
+If you want to get git repository by ssh install Vim and OpenSSH, add ssh key to `/tmp/key` file and load it
+
+`chmod 400 /tmp/key && eval $(ssh-agent -s ) && ssh-add /tmp/key`
+
+Clone repository and run build
+
+```bash
+git clone git@github.com:swisschain/Sirius.Tools.CustodyCLI.git
+cd Sirius.Tools.CustodyCLI
+dotnet build
+```
+
+Go to the `bin` directory:
+
+`cd src/Sirius.Tools.CustodyCLI/bin/Debug/net5.0/`
+
+You can run commands now
+
 ## Commands
 
 ### Generate
@@ -56,25 +78,3 @@ Initializes Vault database. Creates required roles and DB. Both Vault and Guardi
 There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
 
 Example: `CustodyCli.exe initvaultdb -c "Server=localhost;Database=postgres;Port=5432;User Id=admin;Password=admin;SSL Mode=Prefer;Root Certificate=cert.pem" -p "0123456789ABCdef"`
-
-### Run in docker
-
-Run docker
-
-`docker run --name dn -it mcr.microsoft.com/dotnet/sdk:5.0`
-
-If you plan to get git repository by ssh install Vim and OpenSSH, add ssh key to /tmp/key file and load it
-
-`chmod 400 /tmp/key && eval $(ssh-agent -s ) && ssh-add /tmp/key`
-
-Clone repository and run build
-
-`git clone git@github.com:swisschain/Sirius.Tools.CustodyCLI.git && cd Sirius.Tools.CustodyCLI/ && dotnet build`
-
-Go to bin directory
-
-`cd src/Sirius.Tools.CustodyCLI/bin/Debug/net5.0/`
-
-Run initialization
-
-`dotnet CustodyCli.dll setup -u|--url <Custody URL> -f|--file <Custody settings encrypted file>`
