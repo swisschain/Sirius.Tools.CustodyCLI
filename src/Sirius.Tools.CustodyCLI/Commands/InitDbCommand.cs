@@ -146,7 +146,7 @@ GRANT {_groupName} TO {connection.UserName};
             var command = connection.CreateCommand();
 
             command.CommandText = @$"
-CREATE DATABASE custody
+CREATE DATABASE {_dbName}
     WITH 
     OWNER = {_groupName}
     ENCODING = 'UTF8'
