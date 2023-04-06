@@ -63,7 +63,7 @@ Example: `CustodyCli.exe setup -u http://localhost:5000/ -f guardian-encrypted.j
 
 Initializes Guardian database. Creates required roles and DB. Both Vault and Guardian can use the same DB and user role.
 
-`CustodyCli.exe initguardiandb -c|--conn <DB connection string> -p|--upass <custody user password>`
+`CustodyCli.exe initguardiandb -c|--conn <DB connection string> -p|--upass <DB user password> [-d|--dbname <DB name. Default: custody>] [-g|--group <DB users group name. Default: sirius_users_group. Default: sirius_guardian_user>] [-u|--uname <DB user name>] [--connlimit <DB user connections limit. Default: 50>] [--dbconnlimit <DB connections limit. Default: -1>]`
 
 There are also optional parameters, see `CustodyCli.exe initguardiandb --help` for all options.
 
@@ -73,7 +73,7 @@ Example: `CustodyCli.exe initguardiandb -c "Server=localhost;Database=postgres;P
 
 Initializes Vault database. Creates required roles and DB. Both Vault and Guardian can use the same DB and user role.
 
-`CustodyCli.exe initvaultdb -c|--conn <DB connection string> -p|--upass <custody user password>`
+`CustodyCli.exe initvaultdb -c|--conn <DB connection string> -p|--upass <DB user password> [-d|--dbname <DB name. Default: custody>] [-g|--group <DB users group name. Default: sirius_users_group. Default: sirius_vault_user>] [-u|--uname <DB user name>] [--connlimit <DB user connections limit. Default: 50>] [--dbconnlimit <DB connections limit. Default: -1>]`
 
 There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
 
