@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using GuardianApiClient.Models;
+using Microsoft.Extensions.Logging;
 
 namespace GuardianApiClient;
 
@@ -9,10 +10,12 @@ public class CustodyApiClient
     private const string SettingsPath = "/api/settings";
 
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<CustodyApiClient> _logger;
 
-    public CustodyApiClient(IHttpClientFactory httpClientFactory)
+    public CustodyApiClient(IHttpClientFactory httpClientFactory, ILogger<CustodyApiClient> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
     public async Task<SettingsModel?> GetSettingsAsync(string url)
@@ -58,7 +61,7 @@ public class CustodyApiClient
         await HandleErrorResponseAsync(result);
     }
 
-    private static async Task HandleErrorResponseAsync(HttpResponseMessage result)
+    private async Task HandleErrorResponseAsync(HttpResponseMessage result)
     {
         if (result.StatusCode == HttpStatusCode.BadRequest)
         {
@@ -72,9 +75,9 @@ public class CustodyApiClient
                 if (error != null)
                     throw new ApiException(error.Message);
             }
-            catch (JsonException)
+            catch (JsonException exception)
             {
-                // ignore
+                _logger.LogError(exception, "Can not deserialize error response");
             }
         }
 

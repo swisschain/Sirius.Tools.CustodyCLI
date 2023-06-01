@@ -20,10 +20,6 @@ try
                 new LoggerConfiguration()
                     .MinimumLevel.Debug()
                     .WriteTo.RollingFile("logs/{Date}-custody-cli.log")
-                    .CreateLogger());
-            logging.AddSerilog(
-                new LoggerConfiguration()
-                    .MinimumLevel.Information()
                     .WriteTo.Console(LogEventLevel.Information, "{Message:lj}{NewLine}")
                     .CreateLogger());
         })

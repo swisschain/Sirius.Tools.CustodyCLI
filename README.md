@@ -79,13 +79,13 @@ There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for 
 
 Example: `CustodyCli.exe initvaultdb -c "Server=localhost;Database=postgres;Port=5432;User Id=admin;Password=admin;SSL Mode=Prefer;Root Certificate=cert.pem" -p "0123456789ABCdef"`
 
-### Vault root key шnitialization
+### Vault root key initialization
 
 Initializes Vault root key while first start. Sends root key configuration to the Vault that starts the initialization process.
 
 `CustodyCli.exe initvaultrootkey -u|--url <Vault URL> -f|--file <Vault root key configaration json file>`
 
-There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
+There are also optional parameters, see `CustodyCli.exe initvaultrootkey --help` for all options.
 
 Example: `CustodyCli.exe initvaultrootkey -u http://localhost:5000/ -f vault-root-key-config.json`
 
@@ -116,7 +116,7 @@ Initializes new Vault root key parameters. Sends root key configuration to the V
 
 `CustodyCli.exe rotatevaultrootkey -u|--url <Vault URL> -f|--file <Vault root key configaration json file>`
 
-There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
+There are also optional parameters, see `CustodyCli.exe rotatevaultrootkey --help` for all options.
 
 Example: `CustodyCli.exe rotatevaultrootkey -u http://localhost:5000/ -f vault-root-key-config.json`
 
