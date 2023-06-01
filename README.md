@@ -10,7 +10,7 @@ This utility can be used to initialize custody Guardian and Vault services. It c
 
 ## Build
 
-`.Net 5.0` SDK is required in order to build and run Custody CLI
+`.Net 7.0` SDK is required in order to build and run Custody CLI
 
 If you want to get git repository by ssh install Vim and OpenSSH, add ssh key to `/tmp/key` file and load it
 
@@ -78,3 +78,61 @@ Initializes Vault database. Creates required roles and DB. Both Vault and Guardi
 There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
 
 Example: `CustodyCli.exe initvaultdb -c "Server=localhost;Database=postgres;Port=5432;User Id=admin;Password=admin;SSL Mode=Prefer;Root Certificate=cert.pem" -p "0123456789ABCdef"`
+
+### Vault root key шnitialization
+
+Initializes Vault root key while first start. Sends root key configuration to the Vault that starts the initialization process.
+
+`CustodyCli.exe initvaultrootkey -u|--url <Vault URL> -f|--file <Vault root key configaration json file>`
+
+There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
+
+Example: `CustodyCli.exe initvaultrootkey -u http://localhost:5000/ -f vault-root-key-config.json`
+
+```json
+{
+  "tenantName": "general",
+  "threshold": 2,
+  "rootKeyHolders": [
+    {
+      "id": "9c970324e7c98d37dbc215666ae6c8c4336756177b208c6c2d7d2f58fae17dee",
+      "name": "RKH 1"
+    },
+    {
+      "id": "3dd412b6b2e6f9326fadecb11de960f31e942acd537fcb7b5f21be6204804043",
+      "name": "RKH 2"
+    },
+    {
+      "id": "eb421f2366dfec7c71333c00f1c5b777a0f9bd7e7ece26c5403723b0b4f6559a",
+      "name": "RKH 5"
+    }
+  ]
+}
+```
+
+### Vault root key rotation
+
+Initializes new Vault root key parameters. Sends root key configuration to the Vault that starts the rotation process.
+
+`CustodyCli.exe rotatevaultrootkey -u|--url <Vault URL> -f|--file <Vault root key configaration json file>`
+
+There are also optional parameters, see `CustodyCli.exe initvaultdb --help` for all options.
+
+Example: `CustodyCli.exe rotatevaultrootkey -u http://localhost:5000/ -f vault-root-key-config.json`
+
+```json
+{
+  "tenantName": "general",
+  "threshold": 2,
+  "rootKeyHolders": [
+    {
+      "id": "9c970324e7c98d37dbc215666ae6c8c4336756177b208c6c2d7d2f58fae17dee",
+      "name": "RKH 3"
+    },
+    {
+      "id": "eb421f2366dfec7c71333c00f1c5b777a0f9bd7e7ece26c5403723b0b4f6559a",
+      "name": "RKH 5"
+    }
+  ]
+}
+```

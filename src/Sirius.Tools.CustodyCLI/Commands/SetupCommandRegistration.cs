@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
+﻿using GuardianApiClient;
+using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sirius.Tools.CustodyCLI.Clients;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {

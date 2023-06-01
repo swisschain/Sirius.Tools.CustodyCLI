@@ -1,77 +1,75 @@
 ﻿using System.Text.Json;
+using GuardianApiClient;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sirius.Tools.CustodyCLI.Clients;
 
-namespace Sirius.Tools.CustodyCLI.Commands
+namespace Sirius.Tools.CustodyCLI.Commands;
+
+public class EncryptCommandRegistration : ICommandRegistration
 {
+    private readonly CommandFactory _factory;
 
-    public class EncryptCommandRegistration : ICommandRegistration
+    public EncryptCommandRegistration(CommandFactory factory)
     {
-        private readonly CommandFactory _factory;
+        _factory = factory;
+    }
 
-        public EncryptCommandRegistration(CommandFactory factory)
+    public void StartExecution(CommandLineApplication lineApplication)
+    {
+        lineApplication.Description = "Encrypts custody settings.";
+        lineApplication.HelpOption("-?|-h|--help");
+
+        var keyOption = lineApplication.Option(
+            "-k|--key <key>",
+            "Custody settings public key file",
+            CommandOptionType.SingleValue);
+
+        var urlOption = lineApplication.Option(
+            "-u|--url <url>",
+            "Custody URL",
+            CommandOptionType.SingleValue);
+
+        var inOption = lineApplication.Option(
+            "-i|--in <in>",
+            "Custody settings JSON file",
+            CommandOptionType.SingleValue);
+
+        var outOption = lineApplication.Option(
+            "-o|--out <in>",
+            "Custody encrypted settings JSON file",
+            CommandOptionType.SingleValue);
+
+        lineApplication.OnExecute(async () =>
         {
-            _factory = factory;
-        }
+            var keyOptionValue = keyOption.Value();
+            var urlOptionValue = urlOption.Value();
 
-        public void StartExecution(CommandLineApplication lineApplication)
-        {
-            lineApplication.Description = "Encrypts custody settings.";
-            lineApplication.HelpOption("-?|-h|--help");
+            if (string.IsNullOrEmpty(keyOptionValue) && string.IsNullOrEmpty(urlOptionValue))
+                throw new OptionInvalidException(
+                    "Either custody settings public key file or custody URL is required.");
 
-            var keyOption = lineApplication.Option(
-                "-k|--key <key>",
-                "Custody settings public key file",
-                CommandOptionType.SingleValue);
+            var inOptionValue = inOption.Value();
 
-            var urlOption = lineApplication.Option(
-                "-u|--url <url>",
-                "Custody URL",
-                CommandOptionType.SingleValue);
+            if (string.IsNullOrEmpty(inOptionValue))
+                throw new OptionInvalidException("Custody settings JSON file is required.");
 
-            var inOption = lineApplication.Option(
-                "-i|--in <in>",
-                "Custody settings JSON file",
-                CommandOptionType.SingleValue);
+            var outOptionValue = outOption.Value();
 
-            var outOption = lineApplication.Option(
-                "-o|--out <in>",
-                "Custody encrypted settings JSON file",
-                CommandOptionType.SingleValue);
+            if (string.IsNullOrEmpty(outOptionValue))
+                throw new OptionInvalidException("Custody encrypted settings JSON file is required.");
 
-            lineApplication.OnExecute(async () =>
-            {
-                var keyOptionValue = keyOption.Value();
-                var urlOptionValue = urlOption.Value();
+            var command = _factory.CreateCommand(serviceProvider =>
+                new EncryptCommand(
+                    keyOptionValue,
+                    urlOptionValue,
+                    inOptionValue,
+                    outOptionValue,
+                    serviceProvider.GetRequiredService<JsonSerializerOptions>(),
+                    serviceProvider.GetRequiredService<CustodyApiClient>(),
+                    serviceProvider.GetRequiredService<ILogger<EncryptCommand>>()));
 
-                if (string.IsNullOrEmpty(keyOptionValue) && string.IsNullOrEmpty(urlOptionValue))
-                    throw new OptionInvalidException(
-                        "Either custody settings public key file or custody URL is required.");
-
-                var inOptionValue = inOption.Value();
-
-                if (string.IsNullOrEmpty(inOptionValue))
-                    throw new OptionInvalidException("Custody settings JSON file is required.");
-
-                var outOptionValue = outOption.Value();
-
-                if (string.IsNullOrEmpty(outOptionValue))
-                    throw new OptionInvalidException("Custody encrypted settings JSON file is required.");
-
-                var command = _factory.CreateCommand(serviceProvider =>
-                    new EncryptCommand(
-                        keyOptionValue,
-                        urlOptionValue,
-                        inOptionValue,
-                        outOptionValue,
-                        serviceProvider.GetRequiredService<JsonSerializerOptions>(),
-                        serviceProvider.GetRequiredService<CustodyApiClient>(),
-                        serviceProvider.GetRequiredService<ILogger<EncryptCommand>>()));
-
-                return await command.ExecuteAsync();
-            });
-        }
+            return await command.ExecuteAsync();
+        });
     }
 }
