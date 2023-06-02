@@ -16,6 +16,12 @@ ProjectSection(SolutionItems) = preProject
 	README.md = README.md
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultApiClient", "src\VaultApiClient\VaultApiClient.csproj", "{200495E7-EBA5-4886-835C-BFC0442EE467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardianApiClient", "src\GuardianApiClient\GuardianApiClient.csproj", "{47715910-9AD9-4507-9301-C1253D88BD43}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clients", "clients", "{CACCEF39-9AAA-4C93-A4D1-6168AE35BE83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,8 +36,18 @@ Global
 		{4B6A942B-421F-406E-ACAE-CA4CD0213819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B6A942B-421F-406E-ACAE-CA4CD0213819}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B6A942B-421F-406E-ACAE-CA4CD0213819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200495E7-EBA5-4886-835C-BFC0442EE467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200495E7-EBA5-4886-835C-BFC0442EE467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200495E7-EBA5-4886-835C-BFC0442EE467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200495E7-EBA5-4886-835C-BFC0442EE467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47715910-9AD9-4507-9301-C1253D88BD43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47715910-9AD9-4507-9301-C1253D88BD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47715910-9AD9-4507-9301-C1253D88BD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47715910-9AD9-4507-9301-C1253D88BD43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4B6A942B-421F-406E-ACAE-CA4CD0213819} = {18B024EA-46D2-49C7-8631-F08C5DC9FD77}
+		{47715910-9AD9-4507-9301-C1253D88BD43} = {CACCEF39-9AAA-4C93-A4D1-6168AE35BE83}
+		{200495E7-EBA5-4886-835C-BFC0442EE467} = {CACCEF39-9AAA-4C93-A4D1-6168AE35BE83}
 	EndGlobalSection
 EndGlobal

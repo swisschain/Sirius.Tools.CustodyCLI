@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using GuardianApiClient;
 using Microsoft.Extensions.Logging;
-using Sirius.Tools.CustodyCLI.Clients;
 
 namespace Sirius.Tools.CustodyCLI.Commands
 {
