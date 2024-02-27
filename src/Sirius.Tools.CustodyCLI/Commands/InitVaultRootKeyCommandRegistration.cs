@@ -46,7 +46,6 @@ public class InitVaultRootKeyCommandRegistration : ICommandRegistration
 
             var command = _factory.CreateCommand(serviceProvider =>
                 new InitVaultRootKeyCommand(
-                    urlOptionValue,
                     fileOptionValue,
                     serviceProvider.GetRequiredService<IVaultApiClientFactory>().Create(urlOptionValue),
                     _jsonSerializerOptions,

@@ -9,20 +9,17 @@ namespace Sirius.Tools.CustodyCLI.Commands;
 
 public class InitVaultRootKeyCommand : ICommand
 {
-    private readonly string _url;
     private readonly string _file;
     private readonly IVaultApiClient _vaultApiClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly ILogger<InitVaultRootKeyCommand> _logger;
 
     public InitVaultRootKeyCommand(
-        string url,
         string file,
         IVaultApiClient vaultApiClient,
         JsonSerializerOptions jsonSerializerOptions,
         ILogger<InitVaultRootKeyCommand> logger)
     {
-        _url = url;
         _file = file;
         _vaultApiClient = vaultApiClient;
         _jsonSerializerOptions = jsonSerializerOptions;
@@ -51,6 +48,8 @@ public class InitVaultRootKeyCommand : ICommand
                     .Select(o => new RootKeyHolderModel { Id = o.Id, Name = o.Name })
                     .ToList()
             });
+
+            _logger.LogInformation("Vault root key initialization successfully done");
         }
         catch (ApiException exception)
         {
@@ -60,8 +59,6 @@ public class InitVaultRootKeyCommand : ICommand
         {
             _logger.LogError(exception, "An error occurred while initializing vault root key");
         }
-
-        _logger.LogInformation("Vault root key initialization successfully done");
 
         return 0;
     }
