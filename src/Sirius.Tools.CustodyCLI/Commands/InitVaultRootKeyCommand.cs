@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using GuardianApiClient;
 using Microsoft.Extensions.Logging;
+using Refit;
 using Sirius.Tools.CustodyCLI.Contracts.Vault;
 using VaultApiClient;
 using VaultApiClient.Models;
@@ -53,7 +53,7 @@ public class InitVaultRootKeyCommand : ICommand
         }
         catch (ApiException exception)
         {
-            _logger.LogError(exception, exception.Message);
+            _logger.LogError(exception.Content);
         }
         catch (Exception exception)
         {
